@@ -35,6 +35,13 @@ public class ProductServiceImpl implements ProductService {
         return productPage.map(product -> productMapper.productEntityToDto(product));
     }
 
+    @Override
+    public List<ProductResponse> searchProductByName(String keyword) {
+        List<Product> products = productRepository.searchProductByName(keyword);
+        return products.stream().map(product -> productMapper.productEntityToDto(product))
+                .collect(Collectors.toList());
+    }
+
 
 //    @Override
 //    public List<ProductResponse> getAllProducts() {
