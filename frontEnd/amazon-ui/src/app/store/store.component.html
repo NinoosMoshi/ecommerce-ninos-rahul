@@ -15,13 +15,23 @@
 
       <h5 class="text-primary ml-3 mt-4 mb-3">Brands</h5>
       <ul class="list-group my-3">
-        <li class="list-group-item" *ngFor="let brand of brands">
+        <li
+          class="list-group-item"
+          *ngFor="let brand of brands"
+          [ngClass]="{ active: selectedBrand === brand }"
+          (click)="selectBrand(brand)"
+        >
           {{ brand.name }}
         </li>
       </ul>
       <h5 class="text-primary ml-3">Types</h5>
       <ul class="list-group my-3">
-        <li class="list-group-item" *ngFor="let type of types">
+        <li
+          class="list-group-item"
+          *ngFor="let type of types"
+          [ngClass]="{ active: selectedType === type }"
+          (click)="selectType(type)"
+        >
           {{ type.name }}
         </li>
       </ul>

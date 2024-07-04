@@ -69,16 +69,58 @@ public class ProductController {
 
     //  *** get all products with (pageable, search keyword and sort) ****
     // localhost:8080/api/products?sort=name&order=desc
+//    @GetMapping()
+//    public ResponseEntity<Page<ProductResponse>> getAllProducts(
+//            @PageableDefault(size = 10)Pageable pageable,
+//            @RequestParam(name = "keyword", required = false) String keyword,
+//            @RequestParam(name = "sort", defaultValue = "name") String sort,
+//            @RequestParam(name = "order", defaultValue = "asc") String order
+//            ){
+//
+//        Page<ProductResponse> productResponsePage;
+//        if(keyword != null && !keyword.isEmpty()){
+//            List<ProductResponse> productResponses = productService.searchProductByName(keyword);
+//            productResponsePage = new PageImpl<>(productResponses,pageable,productResponses.size());
+//        }else {
+//            // there is no search criteria, then retrieve base on sort
+//            Sort.Direction direction = "asc".equalsIgnoreCase(order) ? Sort.Direction.ASC: Sort.Direction.DESC;
+//            Sort sorting = Sort.by(direction,sort);
+//            productResponsePage = productService.getAllProducts(PageRequest.of(pageable.getPageNumber(),
+//                                                                               pageable.getPageSize(),
+//                                                                               sorting));
+//        }
+//        return new ResponseEntity<>(productResponsePage,HttpStatus.OK);
+//    }
+
+
+    //  *** get all products with (pageable, search keyword, sort and brand ,type) ****
+    // localhost:8080/api/products?sort=name&order=desc
+    // localhost:8080/api/products?brandId=<brandId>&typeId=<typeId>
+    // localhost:8080/api/products?brandId=<brandId>&typeId=<typeId>&keyword=<keyword>
     @GetMapping()
     public ResponseEntity<Page<ProductResponse>> getAllProducts(
             @PageableDefault(size = 10)Pageable pageable,
             @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "brandId", required = false) Long brandId,
+            @RequestParam(name = "typeId", required = false) Long typeId,
             @RequestParam(name = "sort", defaultValue = "name") String sort,
             @RequestParam(name = "order", defaultValue = "asc") String order
-            ){
+    ){
 
         Page<ProductResponse> productResponsePage;
-        if(keyword != null && !keyword.isEmpty()){
+        if(brandId !=null && typeId !=null && keyword != null && !keyword.isEmpty()){
+            // search by brand,type,keyword
+            List<ProductResponse> productResponses =
+                    productService.searchProductByBrandTypeAndName(brandId,typeId,keyword);
+            productResponsePage = new PageImpl<>(productResponses,pageable,productResponses.size());
+        }
+        else if(brandId !=null && typeId !=null){
+            // search by brand,type
+            List<ProductResponse> productResponses =
+                    productService.searchProductByBrandAndType(brandId,typeId);
+            productResponsePage = new PageImpl<>(productResponses,pageable,productResponses.size());
+        }
+        else if(keyword != null && !keyword.isEmpty()){
             List<ProductResponse> productResponses = productService.searchProductByName(keyword);
             productResponsePage = new PageImpl<>(productResponses,pageable,productResponses.size());
         }else {
@@ -86,8 +128,8 @@ public class ProductController {
             Sort.Direction direction = "asc".equalsIgnoreCase(order) ? Sort.Direction.ASC: Sort.Direction.DESC;
             Sort sorting = Sort.by(direction,sort);
             productResponsePage = productService.getAllProducts(PageRequest.of(pageable.getPageNumber(),
-                                                                               pageable.getPageSize(),
-                                                                               sorting));
+                    pageable.getPageSize(),
+                    sorting));
         }
         return new ResponseEntity<>(productResponsePage,HttpStatus.OK);
     }

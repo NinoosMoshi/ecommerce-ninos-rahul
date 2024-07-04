@@ -14,10 +14,16 @@ export class StoreComponent implements OnInit {
   products: Product[] = [];
   brands: Brand[] = [];
   types: Type[] = [];
+  selectedBrand: Brand | null = null;
+  selectedType: Type | null = null;
 
   constructor(private storeService: StoreService) {}
 
   ngOnInit(): void {
+    // initialize selectedBrand and selectedType to null
+    this.selectedBrand = null;
+    this.selectedType = null;
+
     this.fetchProducts();
     this.fetchBrands();
     this.fetchTypes();
@@ -54,5 +60,17 @@ export class StoreComponent implements OnInit {
         console.log(err.message);
       },
     });
+  }
+
+  selectBrand(brand: Brand) {
+    // update the selectedBrand and fetch products
+    this.selectedBrand = brand;
+    this.fetchProducts();
+  }
+
+  selectType(type: Type) {
+    // update the selectedType and fetch products
+    this.selectedType = type;
+    this.fetchProducts();
   }
 }
