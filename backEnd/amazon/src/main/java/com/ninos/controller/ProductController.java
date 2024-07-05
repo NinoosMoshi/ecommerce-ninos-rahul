@@ -120,6 +120,16 @@ public class ProductController {
                     productService.searchProductByBrandAndType(brandId,typeId);
             productResponsePage = new PageImpl<>(productResponses,pageable,productResponses.size());
         }
+        else if(brandId!=null) {
+            //search by brand
+            List<ProductResponse> productResponses = productService.searchProductsByBrand(brandId);
+            productResponsePage = new PageImpl<>(productResponses, pageable, productResponses.size());
+        }
+        else if(typeId!=null) {
+            //search by type
+            List<ProductResponse> productResponses = productService.searchProductsByType(typeId);
+            productResponsePage = new PageImpl<>(productResponses, pageable, productResponses.size());
+        }
         else if(keyword != null && !keyword.isEmpty()){
             List<ProductResponse> productResponses = productService.searchProductByName(keyword);
             productResponsePage = new PageImpl<>(productResponses,pageable,productResponses.size());

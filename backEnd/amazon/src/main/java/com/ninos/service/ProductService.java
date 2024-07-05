@@ -15,8 +15,13 @@ public interface ProductService {
 
     List<ProductResponse> searchProductByName(String keyword);
 
+    List<ProductResponse> searchProductsByBrand(Long brandId);
+
+    List<ProductResponse> searchProductsByType(Long typeId);
+
+    List<ProductResponse> searchProductByBrandAndType(Long brandId, Long typeId);
 
     List<ProductResponse> searchProductByBrandTypeAndName(Long brandId, Long typeId, String keyword);
 
-    List<ProductResponse> searchProductByBrandAndType(Long brandId, Long typeId);
+
 }

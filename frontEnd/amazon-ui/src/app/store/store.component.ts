@@ -20,17 +20,28 @@ export class StoreComponent implements OnInit {
   constructor(private storeService: StoreService) {}
 
   ngOnInit(): void {
-    // initialize selectedBrand and selectedType to null
-    this.selectedBrand = null;
-    this.selectedType = null;
+    // initialize selectedBrand and selectedType to "All"
+    this.selectedBrand = { id: 0, name: 'All' };
+    this.selectedType = { id: 0, name: 'All' };
 
-    this.fetchProducts();
+    // check if both selectedBrand and selectedType are "All"
+    if (this.selectedBrand.id === 0 && this.selectedType.id === 0) {
+      this.fetchProducts(); // fetch all record without brand and type filtering
+    } else {
+      // Fetch products with the selected brand and type
+      this.fetchProducts();
+    }
+
     this.fetchBrands();
     this.fetchTypes();
   }
 
   fetchProducts() {
-    this.storeService.getProducts().subscribe({
+    // pass selected brand/type ids
+    const brandId = this.selectedBrand?.id;
+    const typeId = this.selectedType?.id;
+
+    this.storeService.getProducts(brandId, typeId).subscribe({
       next: (res) => {
         this.products = res.content;
       },

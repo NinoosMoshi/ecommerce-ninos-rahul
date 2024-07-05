@@ -43,6 +43,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductResponse> searchProductsByBrand(Long brandId) {
+        List<Product> products = productRepository.searchByBrand(brandId);
+        return products.stream().map(product -> productMapper.productEntityToDto(product))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductResponse> searchProductsByType(Long typeId) {
+        List<Product> products = productRepository.searchByType(typeId);
+        return products.stream().map(product -> productMapper.productEntityToDto(product))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<ProductResponse> searchProductByBrandTypeAndName(Long brandId, Long typeId, String keyword) {
         List<Product> products = productRepository.searchProductByBrandTypeAndName(brandId, typeId, keyword);
         return products.stream().map(product -> productMapper.productEntityToDto(product))
